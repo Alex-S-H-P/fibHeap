@@ -37,11 +37,18 @@ func (n *Node[PRIORITY, T]) merge(m *Node[PRIORITY, T]) *Node[PRIORITY, T] {
 		return m.merge(n)
 	}
 	// m is the subtree
+	if n.degree != 0 {
+		n.rightMostChild.rightSib = m
+		m.leftSib = n.rightMostChild
+		n.rightMostChild = m
+		m.parent = n
+	} else {
+		n.leftMostChild = m
+		n.rightMostChild = m
+		m.parent = n
+	}
+
 	n.degree++
-	n.rightMostChild.rightSib = m
-	m.leftSib = n.rightMostChild
-	n.rightMostChild = m
-	m.parent = n
 	return n
 }
 

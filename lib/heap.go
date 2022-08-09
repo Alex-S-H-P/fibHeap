@@ -1,5 +1,6 @@
 package heap
 
+
 type Heap[P Number, T any] struct {
 	leftMostRoot  *Node[P, T]
 	rightMostRoot *Node[P, T]
@@ -31,7 +32,7 @@ func (h *Heap[P, T]) InsertNode(n ...*Node[P, T]) {
 		// roots don't have parents
 		newRoot.parent = nil
 
-		if newRoot.priority >= h.maxNode.priority {
+		if h.maxNode == nil || newRoot.priority >= h.maxNode.priority {
 			h.maxNode = newRoot
 		}
 	}
@@ -58,8 +59,14 @@ func (h *Heap[P, T]) ExtractMax() (P, T) {
 
 	result := h.maxNode
 	h.InsertNode(result.extractAllChildren()...)
-	result.leftSib.rightSib, result.rightSib.leftSib = result.rightSib, result.leftSib
+	if result.leftSib != nil {
+		result.leftSib.rightSib = result.rightSib
+	}
+	if result.rightSib != nil {
+		result.rightSib.leftSib = result.leftSib
+	}
 	result.leftSib, result.rightSib = nil, nil
+	h.numberOfRoots--
 
 	// cleanup
 	h.clean()
@@ -79,6 +86,7 @@ func (h *Heap[P, T]) clean() {
 	}
 	h.leftMostRoot = nil
 	var maxPrioritySet bool
+	h.numberOfRoots = 0
 
 	for _, tree := range degreeArray {
 
@@ -93,6 +101,8 @@ func (h *Heap[P, T]) clean() {
 			tree.leftSib = h.rightMostRoot
 			h.rightMostRoot = tree
 		}
+
+		h.numberOfRoots++
 
 		if !maxPrioritySet || h.maxNode.priority < tree.priority {
 			maxPrioritySet = true
