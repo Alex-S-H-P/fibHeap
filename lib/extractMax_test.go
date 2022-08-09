@@ -106,3 +106,26 @@ func TestHeap2(t *testing.T) {
 	}
 
 }
+
+func TestHeap3(t *testing.T) {
+	h1 := new(Heap[int, string])
+	h1.Insert(1, VAL1)
+	h1.Insert(2, VAL2)
+	h1.Insert(4, VAL3)
+	h1.Insert(3, VAL4)
+	h2 := new(Heap[int, string])
+	h2.Insert(1, VAL1)
+	h2.Insert(2, VAL2)
+	h2.Insert(4, VAL3)
+	h2.Insert(3, VAL4)
+	ch1 := (*CHeap[int, string])(h1)
+	ch2 := (*CHeap[int, string])(h2)
+	if h1.numberOfRoots != 4 || h2.numberOfRoots != 4 {
+		t.Fatal()
+	}
+	ch1.Merge(ch2)
+	if h1.numberOfRoots != 8 || h2.numberOfRoots != 0 {
+		t.Errorf("Unexpected number of roots for:\n\th1 (%v instead of %v)\n\th2 (%v instead of %v)",
+			ch1.numberOfRoots, 8, ch2.numberOfRoots, 0)
+	}
+}
