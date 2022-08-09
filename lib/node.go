@@ -1,19 +1,24 @@
 package heap
 
 // A Node stores a value and a priority such that getting the minimal priority of a Heap is easy
-type Node[PRIORITY Number, T any] struct {
+type Node[P Number, T any] struct {
 	// all of the elements
-	priority PRIORITY
+	priority P
 	element  T
 	// the list of all children
-	children NodeList[PRIORITY, T]
+	leftMostChild  *Node[P, T]
+	rightMostChild *Node[P, T]
 
-	siblings NodeList[PRIORITY, T]
-	sib_idx  int
+	degree int
+
+	parent *Node[P, T]
+
+	leftSib  *Node[P, T]
+	rightSib *Node[P, T]
 }
 
-func makeNode[PRIORITY Number, T any](el T, priority PRIORITY) *Node[PRIORITY, T] {
-	var n *Node[PRIORITY, T] = new(Node[PRIORITY, T])
+func makeNode[P Number, T any](el T, priority P) *Node[P, T] {
+	var n *Node[P, T] = new(Node[P, T])
 
 	n.priority = priority
 	n.element = el
@@ -21,23 +26,46 @@ func makeNode[PRIORITY Number, T any](el T, priority PRIORITY) *Node[PRIORITY, T
 	return n
 }
 
-func (n *Node[PRIORITY, T]) Degree() int {
-	return len(n.children)
+func (n *Node[P, T]) Degree() int {
+	return n.degree
 }
 
-func (n *Node[PRIORITY, T]) merge(m *Node[PRIORITY, T]) *Node[PRIORITY, T] {
+func (n *Node[P, T]) merge(m *Node[P, T]) *Node[P, T] {
 	// if n is not the root of the new tree
 	if n.priority < m.priority {
 		// we flip the calls
 		return m.merge(n)
 	}
 	// m is the subtree
-	m.sib_idx = len(n.children)
-	m.siblings = n.children
-	n.children = append(n.children, m)
+	if n.degree != 0 {
+		n.rightMostChild.rightSib = m
+		m.leftSib = n.rightMostChild
+		n.rightMostChild = m
+		m.parent = n
+	} else {
+		n.leftMostChild = m
+		n.rightMostChild = m
+		m.parent = n
+	}
+
+	n.degree++
 	return n
 }
 
-func (n *Node[PRIORITY, T]) GetValue() T {
+func (n *Node[P, T]) GetValue() T {
 	return n.element
 }
+
+// Empties the list of all children into a slice. The children are still linked
+func (n *Node[P, T]) extractAllChildren() []*Node[P, T] {
+	all := make([]*Node[P, T], n.degree)
+	for i := 0; i < n.degree; i++ {
+		all[i] = n.leftMostChild
+		all[i].parent = nil
+		n.leftMostChild = all[i].rightSib
+	}
+	n.degree = 0
+	n.rightMostChild = nil
+	return all
+}
+
