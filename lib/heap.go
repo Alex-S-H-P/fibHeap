@@ -47,9 +47,11 @@ func (h *Heap[P, T]) ExtractMax() (P, T) {
 		h.rootList[h.maxNode.sib_idx+1:]...)
 
 	// cleanup
-	if len(h.rootList) > maxDegree {
-		h.clean()
+	h.clean()
+	if h.maxNode == result { // no operation did set a new maxNode
+		h.maxNode = nil // we are empty
 	}
+
 	return result.priority, result.element
 }
 
