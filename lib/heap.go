@@ -121,6 +121,10 @@ func (h *Heap[P, T]) clean() {
 	}
 }
 
+/*
+Increases the priority of a node
+If the node is would get a larger priority than its parent, then adds it as a new root
+*/
 func (h *Heap[P, T]) IncreasePriority(n *Node[P, T], newPriority P) {
 	if newPriority < n.priority {
 		return
@@ -128,6 +132,9 @@ func (h *Heap[P, T]) IncreasePriority(n *Node[P, T], newPriority P) {
 	if n.parent == nil || n.parent.priority > newPriority {
 		n.priority = newPriority
 	} else {
-
+		n.parent.degree--
+		n.leftSib.rightSib = n.rightSib
+		n.rightSib.leftSib = n.leftSib
+		h.InsertNode(n)
 	}
 }
