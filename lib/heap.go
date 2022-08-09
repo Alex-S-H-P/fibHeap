@@ -1,6 +1,5 @@
 package heap
 
-
 type Heap[P Number, T any] struct {
 	leftMostRoot  *Node[P, T]
 	rightMostRoot *Node[P, T]
@@ -65,7 +64,14 @@ func (h *Heap[P, T]) ExtractMax() (P, T) {
 	if result.rightSib != nil {
 		result.rightSib.leftSib = result.leftSib
 	}
+	if h.maxNode == h.leftMostRoot {
+		h.leftMostRoot = result.rightSib
+	}
+	if h.rightMostRoot == h.maxNode {
+		h.rightMostRoot = result.leftSib
+	}
 	result.leftSib, result.rightSib = nil, nil
+	h.maxNode = nil
 	h.numberOfRoots--
 
 	// cleanup
@@ -85,28 +91,32 @@ func (h *Heap[P, T]) clean() {
 		degreeArray.assign(tree)
 	}
 	h.leftMostRoot = nil
-	var maxPrioritySet bool
+	var maxPrioritySet bool = false
 	h.numberOfRoots = 0
 
 	for _, tree := range degreeArray {
-
 		if tree == nil {
 			continue
 		}
+		tree.parent = nil
 		if h.leftMostRoot == nil {
 			h.leftMostRoot = tree
 			h.rightMostRoot = tree
+			tree.leftSib = nil
+			tree.rightSib = nil
 		} else {
 			h.rightMostRoot.rightSib = tree
 			tree.leftSib = h.rightMostRoot
 			h.rightMostRoot = tree
+			tree.rightSib = nil
 		}
 
 		h.numberOfRoots++
 
-		if !maxPrioritySet || h.maxNode.priority < tree.priority {
-			maxPrioritySet = true
+		if maxPrioritySet && h.maxNode.priority > tree.priority {
+		} else {
 			h.maxNode = tree
+			maxPrioritySet = true
 		}
 	}
 }
