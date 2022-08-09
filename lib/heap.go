@@ -70,7 +70,7 @@ func (h *Heap[P, T]) ExtractMax() (P, T) {
 
 	// cleanup
 	h.clean()
-	if result == result { // no operation did set a new maxNode
+	if result == h.maxNode { // no operation did set a new maxNode
 		h.maxNode = nil // we are empty
 	}
 
