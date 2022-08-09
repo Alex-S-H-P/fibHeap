@@ -6,8 +6,8 @@ type Heap[P Number, T any] struct {
 	maxNode *node[P, T]
 }
 
-// inserts and updates maximum
-func (h *Heap[P, T]) insert(n ...*node[P, T]) {
+// InsertNodes and updates maximum
+func (h *Heap[P, T]) InsertNode(n ...*node[P, T]) {
 	var prevLen int = len(h.rootList)
 	h.rootList = append(h.rootList, n...)
 
@@ -31,7 +31,7 @@ func (h *Heap[P, T]) GetMax() *node[P, T] {
 
 func (h *Heap[P, T]) Insert(priority P, element T) {
 	n := makeNode(element, priority)
-	h.insert(n)
+	h.InsertNode(n)
 }
 
 // Deletes the max, and returns it
@@ -42,7 +42,7 @@ func (h *Heap[P, T]) ExtractMax() (P, T) {
 	}
 
 	result := h.maxNode
-	h.insert(h.maxNode.children...)
+	h.InsertNode(h.maxNode.children...)
 	h.rootList = append(h.rootList[:h.maxNode.sib_idx],
 		h.rootList[h.maxNode.sib_idx+1:]...)
 
@@ -81,4 +81,8 @@ func (h *Heap[P, T]) clean() {
 		newHeap = append(newHeap, tree)
 	}
 	h.rootList = newHeap
+}
+
+func (h *Heap[P, T]) IncreasePriority() {
+
 }
