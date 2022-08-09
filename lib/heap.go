@@ -136,7 +136,6 @@ func (h *Heap[P, T]) IncreasePriority(n *Node[P, T], newPriority P) {
 	}
 }
 
-
 /*
 Merges h2 into h1 before emptying h2
 */
