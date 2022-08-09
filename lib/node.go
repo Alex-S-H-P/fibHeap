@@ -15,6 +15,8 @@ type Node[P Number, T any] struct {
 
 	leftSib  *Node[P, T]
 	rightSib *Node[P, T]
+
+	marked bool
 }
 
 func makeNode[P Number, T any](el T, priority P) *Node[P, T] {
@@ -69,3 +71,12 @@ func (n *Node[P, T]) extractAllChildren() []*Node[P, T] {
 	return all
 }
 
+func (n *Node[P, T]) cutoutForIncreasePriority(h *Heap[P, T]) {
+	n.parent.degree--
+	n.leftSib.rightSib = n.rightSib
+	n.rightSib.leftSib = n.leftSib
+	h.InsertNode(n)
+	if n.parent.marked {
+		n.parent.cutoutForIncreasePriority(h)
+	}
+}

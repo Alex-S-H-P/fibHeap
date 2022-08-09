@@ -132,12 +132,10 @@ func (h *Heap[P, T]) IncreasePriority(n *Node[P, T], newPriority P) {
 	if n.parent == nil || n.parent.priority > newPriority {
 		n.priority = newPriority
 	} else {
-		n.parent.degree--
-		n.leftSib.rightSib = n.rightSib
-		n.rightSib.leftSib = n.leftSib
-		h.InsertNode(n)
+		n.cutoutForIncreasePriority(h)
 	}
 }
+
 
 /*
 Merges h2 into h1 before emptying h2
