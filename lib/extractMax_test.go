@@ -18,11 +18,11 @@ func TestHeap0(t *testing.T) {
 		t.Errorf("Failed to write valid max value")
 	}
 	if h.GetMax().GetValue() != VAL1 {
-		t.Errorf("Incorrectly set up node [Value]. Got %v instead of %v",
+		t.Errorf("Incorrectly set up Node [Value]. Got %v instead of %v",
 			h.GetMax().GetValue(), VAL1)
 	}
 	if h.GetMax().Degree() != 0 {
-		t.Errorf("Incorrectly set up node [Children]. Got %v instead of %v",
+		t.Errorf("Incorrectly set up Node [Children]. Got %v instead of %v",
 			h.GetMax().Degree(), 0)
 	}
 	p, v := h.ExtractMax()

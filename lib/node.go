@@ -1,7 +1,7 @@
 package heap
 
-// A node stores a value and a priority such that getting the minimal priority of a Heap is easy
-type node[PRIORITY Number, T any] struct {
+// A Node stores a value and a priority such that getting the minimal priority of a Heap is easy
+type Node[PRIORITY Number, T any] struct {
 	// all of the elements
 	priority PRIORITY
 	element  T
@@ -12,8 +12,8 @@ type node[PRIORITY Number, T any] struct {
 	sib_idx  int
 }
 
-func makeNode[PRIORITY Number, T any](el T, priority PRIORITY) *node[PRIORITY, T] {
-	var n *node[PRIORITY, T] = new(node[PRIORITY, T])
+func makeNode[PRIORITY Number, T any](el T, priority PRIORITY) *Node[PRIORITY, T] {
+	var n *Node[PRIORITY, T] = new(Node[PRIORITY, T])
 
 	n.priority = priority
 	n.element = el
@@ -21,11 +21,11 @@ func makeNode[PRIORITY Number, T any](el T, priority PRIORITY) *node[PRIORITY, T
 	return n
 }
 
-func (n *node[PRIORITY, T]) Degree() int {
+func (n *Node[PRIORITY, T]) Degree() int {
 	return len(n.children)
 }
 
-func (n *node[PRIORITY, T]) merge(m *node[PRIORITY, T]) *node[PRIORITY, T] {
+func (n *Node[PRIORITY, T]) merge(m *Node[PRIORITY, T]) *Node[PRIORITY, T] {
 	// if n is not the root of the new tree
 	if n.priority < m.priority {
 		// we flip the calls
@@ -38,6 +38,6 @@ func (n *node[PRIORITY, T]) merge(m *node[PRIORITY, T]) *node[PRIORITY, T] {
 	return n
 }
 
-func (n *node[PRIORITY, T]) GetValue() T {
+func (n *Node[PRIORITY, T]) GetValue() T {
 	return n.element
 }

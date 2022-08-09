@@ -3,11 +3,11 @@ package heap
 type Heap[P Number, T any] struct {
 	rootList NodeList[P, T]
 
-	maxNode *node[P, T]
+	maxNode *Node[P, T]
 }
 
 // InsertNodes and updates maximum
-func (h *Heap[P, T]) InsertNode(n ...*node[P, T]) {
+func (h *Heap[P, T]) InsertNode(n ...*Node[P, T]) {
 	var prevLen int = len(h.rootList)
 	h.rootList = append(h.rootList, n...)
 
@@ -23,9 +23,9 @@ func (h *Heap[P, T]) InsertNode(n ...*node[P, T]) {
 }
 
 /*
-returns the stored node with max value.
+returns the stored Node with max value.
 */
-func (h *Heap[P, T]) GetMax() *node[P, T] {
+func (h *Heap[P, T]) GetMax() *Node[P, T] {
 	return h.maxNode
 }
 
@@ -56,12 +56,12 @@ func (h *Heap[P, T]) ExtractMax() (P, T) {
 }
 
 func (h *Heap[P, T]) clean() {
-	var degreeArray DegreeArray[P, T] = make([]*node[P, T], maxDegree+1)
+	var degreeArray DegreeArray[P, T] = make([]*Node[P, T], maxDegree+1)
 	for _, tree := range h.rootList {
 		degreeArray.assign(tree)
 	}
 
-	var newHeap NodeList[P, T] = make([]*node[P, T], 0, len(degreeArray))
+	var newHeap NodeList[P, T] = make([]*Node[P, T], 0, len(degreeArray))
 	var maxPrioritySet bool
 	var curIdx int = 0
 
