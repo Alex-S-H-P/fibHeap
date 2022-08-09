@@ -37,3 +37,7 @@ func (n *node[PRIORITY, T]) merge(m *node[PRIORITY, T]) *node[PRIORITY, T] {
 	n.children = append(n.children, m)
 	return n
 }
+
+func (n *node[PRIORITY, T]) GetValue() T {
+	return n.element
+}
