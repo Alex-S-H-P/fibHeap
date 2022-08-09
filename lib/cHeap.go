@@ -82,3 +82,7 @@ func (ch *CHeap[P, T]) Insert(priority P, element T) {
 func (ch *CHeap[P, T]) InsertNode(n *Node[P, T]) {
 	(*Heap[P, T])(ch).InsertNode(n)
 }
+
+func (ch *CHeap[P, T]) Merge(ch2 *CHeap[P, T]) {
+	(*Heap[P, T])(ch).Merge((*Heap[P, T])(ch2))
+}

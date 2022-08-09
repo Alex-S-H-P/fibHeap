@@ -138,3 +138,23 @@ func (h *Heap[P, T]) IncreasePriority(n *Node[P, T], newPriority P) {
 		h.InsertNode(n)
 	}
 }
+
+/*
+Merges h2 into h1 before emptying h2
+*/
+func (h *Heap[P, T]) Merge(h2 *Heap[P, T]) {
+	h.rightMostRoot.rightSib = h2.leftMostRoot
+	h2.leftMostRoot.leftSib = h.rightMostRoot.rightSib
+	h.rightMostRoot = h2.rightMostRoot
+	h.numberOfRoots += h2.numberOfRoots
+	if h2.maxNode.priority >= h.maxNode.priority {
+		h.maxNode = h2.maxNode
+	}
+
+	h2.leftMostRoot, h2.rightMostRoot, h2.maxNode = nil, nil, nil
+	h2.numberOfRoots = 0
+
+	if h.numberOfRoots > maxDegree {
+		h.clean()
+	}
+}
