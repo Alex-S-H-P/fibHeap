@@ -64,7 +64,8 @@ func (h *Heap[P, T]) clean() {
 	var newHeap NodeList[P, T] = make([]*node[P, T], 0, len(degreeArray))
 	var maxPrioritySet bool
 
-	for _, tree := range degreeArray[1:] {
+	for _, tree := range degreeArray {
+
 		if tree == nil {
 			continue
 		}
