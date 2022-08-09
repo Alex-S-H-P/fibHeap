@@ -36,3 +36,47 @@ func TestHeap0(t *testing.T) {
 			p, v, 0, "")
 	}
 }
+
+func TestHeap1(t *testing.T) {
+	h := new(Heap[int, string])
+	h.Insert(1, VAL1)
+	h.Insert(2, VAL2)
+	h.Insert(4, VAL3)
+	h.Insert(3, VAL4)
+	/* h:
+
+	roots 	: 	[(1 VAL1)	(2 VAL2)	(4 VAL3)	(3 VAL4)]
+	maxNode	:	-> (4 VAL3)
+	*/
+	p, v := h.ExtractMax()
+	if p != 4 || v != VAL3 {
+		t.Errorf("Could not extract properly [Value]. Got (%v, %v) instead of (%v, %v)",
+			p, v, 4, VAL3)
+	}
+	/* h:
+
+	roots 	: 	[( 3 VAL4 {( 2 VAL2 {( 1 VAL1 )} )} )]
+	maxNode	:	-> (3 VAL4)
+	/
+	if h.GetMax().Degree() != 1 {
+		t.Errorf("Incorrectly set up node [Children]. Got %v instead of %v",
+			h.GetMax().Degree(), 1)
+	}
+	*/
+	p, v = h.ExtractMax()
+	if p != 3 || v != VAL4 {
+		t.Errorf("Could not extract properly [Value]. Got (%v, %v) instead of (%v, %v)",
+			p, v, 3, VAL4)
+	}
+
+	/* h:
+
+	roots 	: 	[( 2 VAL2 {( 1 VAL1 )} )]
+	maxNode	:	-> (2 VAL2)
+	*/
+	p, v = h.ExtractMax()
+	if p != 2 || v != VAL2 {
+		t.Errorf("Could not extract properly [Value]. Got (%v, %v) instead of (%v, %v)",
+			p, v, 2, VAL2)
+	}
+}
