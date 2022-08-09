@@ -35,9 +35,10 @@ func (h *Heap[P, T]) Insert(priority P, element T) {
 }
 
 // Deletes the max, and returns it
-func (h *Heap[P, T]) ExtractMax() *node[P, T] {
+func (h *Heap[P, T]) ExtractMax() (P, T) {
 	if h.maxNode == nil {
-		return nil
+		var reslt T
+		return 0, reslt
 	}
 
 	result := h.maxNode
@@ -49,7 +50,7 @@ func (h *Heap[P, T]) ExtractMax() *node[P, T] {
 	if len(h.rootList) > maxDegree {
 		h.clean()
 	}
-	return result
+	return result.priority, result.element
 }
 
 func (h *Heap[P, T]) clean() {
