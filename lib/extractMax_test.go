@@ -80,3 +80,29 @@ func TestHeap1(t *testing.T) {
 			p, v, 2, VAL2)
 	}
 }
+
+func TestHeap2(t *testing.T) {
+	h := new(Heap[int, string])
+	h.Insert(1, VAL1)
+	h.Insert(2, VAL2)
+	h.Insert(4, VAL3)
+	h.Insert(3, VAL4)
+	ch := (*CHeap[int, string])(h)
+	arr, err := ch.GetNodes(VAL2)
+	if err != nil {
+		t.Error(err)
+	}
+	if len(arr) != 1 {
+		t.Errorf("Did not find a good amount of solutions. Expected %v, found %v",
+			1, len(arr))
+	}
+	ch.clean()
+	if err != nil {
+		t.Error(err)
+	}
+	if len(arr) != 1 {
+		t.Errorf("Did not find a good amount of solutions. Expected %v, found %v",
+			1, len(arr))
+	}
+
+}
