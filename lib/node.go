@@ -6,10 +6,15 @@ type Node[PRIORITY Number, T any] struct {
 	priority PRIORITY
 	element  T
 	// the list of all children
-	children NodeList[PRIORITY, T]
+	leftMostChild  *Node[PRIORITY, T]
+	rightMostChild *Node[PRIORITY, T]
 
-	siblings NodeList[PRIORITY, T]
-	sib_idx  int
+	degree int
+
+	parent *Node[PRIORITY, T]
+
+	leftSib  *Node[PRIORITY, T]
+	rightSib *Node[PRIORITY, T]
 }
 
 func makeNode[PRIORITY Number, T any](el T, priority PRIORITY) *Node[PRIORITY, T] {
@@ -22,7 +27,7 @@ func makeNode[PRIORITY Number, T any](el T, priority PRIORITY) *Node[PRIORITY, T
 }
 
 func (n *Node[PRIORITY, T]) Degree() int {
-	return len(n.children)
+	return n.degree
 }
 
 func (n *Node[PRIORITY, T]) merge(m *Node[PRIORITY, T]) *Node[PRIORITY, T] {
@@ -32,12 +37,27 @@ func (n *Node[PRIORITY, T]) merge(m *Node[PRIORITY, T]) *Node[PRIORITY, T] {
 		return m.merge(n)
 	}
 	// m is the subtree
-	m.sib_idx = len(n.children)
-	m.siblings = n.children
-	n.children = append(n.children, m)
+	n.degree++
+	n.rightMostChild.rightSib = m
+	m.leftSib = n.rightMostChild
+	n.rightMostChild = m
+	m.parent = n
 	return n
 }
 
 func (n *Node[PRIORITY, T]) GetValue() T {
 	return n.element
+}
+
+// Empties the list of all children into a slice. The children are still linked
+func (n *Node[PRIORITY, T]) extractAllChildren() []*Node[PRIORITY, T] {
+	all := make([]*Node[PRIORITY, T], n.degree)
+	for i := 0; i < n.degree; i++ {
+		all[i] = n.leftMostChild
+		all[i].parent = nil
+		n.leftMostChild = all[i].rightSib
+	}
+	n.degree = 0
+	n.rightMostChild = nil
+	return all
 }
