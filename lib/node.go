@@ -1,24 +1,24 @@
 package heap
 
 // A Node stores a value and a priority such that getting the minimal priority of a Heap is easy
-type Node[PRIORITY Number, T any] struct {
+type Node[P Number, T any] struct {
 	// all of the elements
-	priority PRIORITY
+	priority P
 	element  T
 	// the list of all children
-	leftMostChild  *Node[PRIORITY, T]
-	rightMostChild *Node[PRIORITY, T]
+	leftMostChild  *Node[P, T]
+	rightMostChild *Node[P, T]
 
 	degree int
 
-	parent *Node[PRIORITY, T]
+	parent *Node[P, T]
 
-	leftSib  *Node[PRIORITY, T]
-	rightSib *Node[PRIORITY, T]
+	leftSib  *Node[P, T]
+	rightSib *Node[P, T]
 }
 
-func makeNode[PRIORITY Number, T any](el T, priority PRIORITY) *Node[PRIORITY, T] {
-	var n *Node[PRIORITY, T] = new(Node[PRIORITY, T])
+func makeNode[P Number, T any](el T, priority P) *Node[P, T] {
+	var n *Node[P, T] = new(Node[P, T])
 
 	n.priority = priority
 	n.element = el
@@ -26,11 +26,11 @@ func makeNode[PRIORITY Number, T any](el T, priority PRIORITY) *Node[PRIORITY, T
 	return n
 }
 
-func (n *Node[PRIORITY, T]) Degree() int {
+func (n *Node[P, T]) Degree() int {
 	return n.degree
 }
 
-func (n *Node[PRIORITY, T]) merge(m *Node[PRIORITY, T]) *Node[PRIORITY, T] {
+func (n *Node[P, T]) merge(m *Node[P, T]) *Node[P, T] {
 	// if n is not the root of the new tree
 	if n.priority < m.priority {
 		// we flip the calls
@@ -52,13 +52,13 @@ func (n *Node[PRIORITY, T]) merge(m *Node[PRIORITY, T]) *Node[PRIORITY, T] {
 	return n
 }
 
-func (n *Node[PRIORITY, T]) GetValue() T {
+func (n *Node[P, T]) GetValue() T {
 	return n.element
 }
 
 // Empties the list of all children into a slice. The children are still linked
-func (n *Node[PRIORITY, T]) extractAllChildren() []*Node[PRIORITY, T] {
-	all := make([]*Node[PRIORITY, T], n.degree)
+func (n *Node[P, T]) extractAllChildren() []*Node[P, T] {
+	all := make([]*Node[P, T], n.degree)
 	for i := 0; i < n.degree; i++ {
 		all[i] = n.leftMostChild
 		all[i].parent = nil
@@ -68,3 +68,4 @@ func (n *Node[PRIORITY, T]) extractAllChildren() []*Node[PRIORITY, T] {
 	n.rightMostChild = nil
 	return all
 }
+
