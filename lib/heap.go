@@ -1,5 +1,7 @@
 package heap
 
+import "fmt"
+
 type Heap[P Number, T any] struct {
 	rootList NodeList[P, T]
 
@@ -56,21 +58,28 @@ func (h *Heap[P, T]) ExtractMax() (P, T) {
 }
 
 func (h *Heap[P, T]) clean() {
+	fmt.Println("\033[33;1mClean called\033[0m")
 	var degreeArray DegreeArray[P, T] = make([]*node[P, T], maxDegree+1)
 	for _, tree := range h.rootList {
+		fmt.Println("\t", tree.priority, tree.element)
 		degreeArray.assign(tree)
+
 	}
 
 	var newHeap NodeList[P, T] = make([]*node[P, T], 0, len(degreeArray))
 	var maxPrioritySet bool
 	var curIdx int = 0
 
+	fmt.Println("DEGREE ARRAY FILLED")
+
 	for _, tree := range degreeArray {
 
 		if tree == nil {
+			fmt.Println("\t[]")
 			continue
 		}
 
+		fmt.Println("\t[", tree.element, "]")
 		tree.sib_idx = curIdx
 		curIdx++
 
