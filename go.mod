@@ -1,4 +1,4 @@
-module fibHeap
+module github.com/Alex-S-H-P/fibHeap
 
 go 1.18
 
